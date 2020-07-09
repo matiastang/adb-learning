@@ -5,10 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: 调试",
+            "name": "Python: 调试python_adb_device",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/src/python_adb_device.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: 调试python_run_pipe",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/python_run_pipe.py",
             "console": "integratedTerminal"
         }
     ]
