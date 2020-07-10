@@ -2,7 +2,7 @@
 
 Android Debug Bridge 安卓调试桥学习
 
-[ADB的常用命令](http://www.aoaoyi.com/archives/738.html)
+[ADB的常用命令(重要)](http://www.aoaoyi.com/archives/738.html)
 
 ## 简介
 

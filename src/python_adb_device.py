@@ -5,6 +5,7 @@ import os
 import subprocess
 
 import python_run_pipe
+import python_isIMEI
 
 def device_version():
     platformVersion = os.popen('adb shell getprop ro.build.version.release').read().replace('\n','')
@@ -36,6 +37,7 @@ def device_info():
 
     imei = device_imei()
     print('imei: %s'% imei)
+    print('imei格式(1为imei): %d'% python_isIMEI.isImei(imei))
 
     deviceName = os.popen('adb shell getprop ro.product.model').read()
     print('手机名称: %s' % deviceName)
