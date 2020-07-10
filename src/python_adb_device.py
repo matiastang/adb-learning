@@ -17,27 +17,16 @@ def device_imei():
         low_version_imei = os.popen('adb shell dumpsys iphonesubinfo').read().replace('\n','')
         print('低版本(<= 4.4)imei: %s'% low_version_imei)
         return low_version_imei
-    # high_version_imei_str = os.popen("adb shell 'service call iphonesubinfo 1 \| grep -o \"[0-9a-f]\{8\} \" | tail -n+3 | while read a; do echo -n \"\u${a:4:4}\u${a:0:4}\"; done'").read().replace('\n','')
-    # os.popen('adb shell')
-    # os.popen('su')
-    # high_version_imei_str = os.popen('adb shell "service call iphonesubinfo 1 | grep -o \"[0-9a-f]\{8\} \" | tail -n+3 | while read a; do echo -n \"\u${a:4:4}\u${a:0:4}\""').read().replace('\n','')
-    # os.popen('exit')
-    # pipe_in, pipe_out = os.Popen2('adb shell "service call iphonesubinfo 1"')
-    # pipe_in.write('grep -o "[0-9a-f]\{8\} "')
-    # pipe_in.write('tail -n+3')
-    # pipe_in.write('while read a; do echo -n "\u${a:4:4}\u${a:0:4}"; done')
-    # pipe_in.write('\n')#需要换行符
-    # pipe_in.flush(); #需要清空缓冲区
-
-    # high_version_imei_str = os.popen('adb shell "service call iphonesubinfo 1"')
-    # high_version_imei_str = pipe_out.readline()#读入结果
-
-    # high_version_imei_str = subprocess.call('adb shell \"service call iphonesubinfo 1 | grep -o \"[0-9a-f]\{8\} \" | tail -n+3 | while read a; do echo -n \"\u${a:4:4}\u${a:0:4}\"\"').read().replace('\n','')
-    # high_version_imei = high_version_imei_str
-    shell = r'adb shell \'service call iphonesubinfo 1 | grep -o "[0-9a-f]\{8\} " | tail -n+3 | while read a; do echo -n "\u${a:4:4}\u${a:0:4}"; done\''
-    # high_version_imei = python_run_pipe.runShell(shell)
-    print(os.popen(shell))
-    high_version_imei = os.popen(shell).read().replace('\n','')
+    # high_version_imei_str = os.popen(r"""adb shell 'service call iphonesubinfo 1 | grep -o "[0-9a-f]\{8\} " | tail -n+3 | while read a; do echo -n "\u${a:4:4}\u${a:0:4}"; done'""").read()
+    # print(high_version_imei_str)
+    # high_version_imei_str = high_version_imei_str.replace('\x00','')
+    # print(high_version_imei_str)
+    # [python cmd 获取 imei](https://stackoverflow.com/questions/27002663/adb-shell-dumpsys-iphonesubinfo-not-working-since-android-5-0-lollipop)
+    high_version_imei_str = os.popen(r"""adb shell service call iphonesubinfo 1 | awk -F "'" '{print $2}' | sed '1 d' | tr -d '.' | awk '{print}' ORS=""").read()
+    # print(high_version_imei_str)
+    # high_version_imei_str = high_version_imei_str.replace(' ','')
+    # print(high_version_imei_str)
+    high_version_imei = high_version_imei_str.replace(' ','')
     return high_version_imei
 
 def device_info():

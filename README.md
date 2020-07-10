@@ -86,6 +86,7 @@ PRODUCER = 'adb shell getprop ro.product.brand'
 ### IMEI
 
 [获取IMEI](http://www.aoaoyi.com/archives/738.html#chapter8.7)
+[python cmd 获取imei](https://stackoverflow.com/questions/27002663/adb-shell-dumpsys-iphonesubinfo-not-working-since-android-5-0-lollipop)
 在 Android 4.4 及以下版本可通过如下命令获取 IMEI：
 ```
 adb shell dumpsys iphonesubinfo
@@ -120,6 +121,21 @@ adb shell "service call iphonesubinfo 1 | grep -o '[0-9a-f]\{8\} ' | tail -n+3 |
 或者在Linux中：
 ```
 adb shell 'service call iphonesubinfo 1 | grep -o "[0-9a-f]\{8\} " | tail -n+3 | while read a; do echo -n "\u${a:4:4}\u${a:0:4}"; done'
+
+adb shell service call iphonesubinfo 1 | awk -F "'" '{print $2}' | sed '1 d' | tr -d '.' | awk '{print}' ORS=
+```
+```py
+import os
+
+def device_imei():
+    version = device_version()
+    if (version < '4.4'):
+        low_version_imei = os.popen('adb shell dumpsys iphonesubinfo').read().replace('\n','')
+        print('低版本(<= 4.4)imei: %s'% low_version_imei)
+        return low_version_imei
+    high_version_imei_str = os.popen(r"""adb shell service call iphonesubinfo 1 | awk -F "'" '{print $2}' | sed '1 d' | tr -d '.' | awk '{print}' ORS=""").read()
+    high_version_imei = high_version_imei_str.replace(' ','')
+    return high_version_imei
 ```
 
 ## adb connect/disconnect
